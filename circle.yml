@@ -6,7 +6,12 @@ machine:
   java:
     version: oraclejdk8
 deployment:
-  releases:
+  snapshot:
+    branch: master
+    owner: opsee
+    commands:
+      - lein deploy
+  release:
     branch: release
     owner: opsee
     commands:
