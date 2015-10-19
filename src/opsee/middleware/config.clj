@@ -1,6 +1,8 @@
 (ns opsee.middleware.config
   (:require [clostache.parser :refer :all]
             [clojure.tools.logging :as log]
+            [opsee.middleware.auth :as auth]
+            [opsee.middleware.core :as core]
             [clojure.walk :refer [keywordize-keys]]
             [cheshire.core :refer :all]))
 
@@ -39,4 +41,6 @@
           contents (render (slurp filename) env)]
       (when (:DEBUG_CONFIG env)
         (log/info contents))
-      (parse-string contents true))))
+      (let [cfg (parse-string contents true)]
+        (auth/set-secret! (core/slurp-bytes (:secret cfg)))
+        cfg))))
