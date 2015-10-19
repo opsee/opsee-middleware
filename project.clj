@@ -21,7 +21,7 @@
                   ["vcs" "commit"]
                   ["shell" "git" "checkout" "master"]
                   ["shell" "git" "merge" "release"]
-                  ["vcs" "push"]]
+                  ["shell" "git" "push" "origin" "master"]]
   :profiles {:dev {:dependencies [[midje "1.6.3"]]
                    :plugins [[lein-midje "3.0.0"]]}}
   :dependencies [[org.clojure/clojure "1.7.0"]
