@@ -1,3 +1,7 @@
+checkout:
+  pre:
+    - git config --global user.email "bots@opsee.co"
+    - git config --global user.name "CI"
 machine:
   java:
     version: oraclejdk8
