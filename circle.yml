@@ -5,12 +5,9 @@ checkout:
 machine:
   java:
     version: oraclejdk8
-notify:
-  webhooks:
-    - url: https://hooks.slack.com/services/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
 deployment:
   releases:
-    branch: master
+    branch: release
     owner: opsee
     commands:
       - lein release

@@ -3,7 +3,8 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :plugins [[s3-wagon-private "1.1.2"]]
+  :plugins [[s3-wagon-private "1.1.2"]
+            [lein-shell "0.4.1"]]
   :repositories [["snapshots" {:url "s3p://opsee-maven-snapshots/snapshot"
                                :username :env
                                :passphrase :env}]
@@ -11,6 +12,16 @@
                               :username :env
                               :passphrase :env
                               :sign-releases false}]]
+  :release-tasks [["vcs" "assert-committed"]
+                  ["change" "version" "leiningen.release/bump-version" "release"]
+                  ["vcs" "commit"]
+                  ["vcs" "tag" "v" "--no-sign"]
+                  ["deploy"]
+                  ["change" "version" "leiningen.release/bump-version"]
+                  ["vcs" "commit"]
+                  ["shell" "git" "co" "master"]
+                  ["shell" "git" "merge" "release"]
+                  ["vcs" "push"]]
   :profiles {:dev {:dependencies [[midje "1.6.3"]]
                    :plugins [[lein-midje "3.0.0"]]}}
   :dependencies [[org.clojure/clojure "1.7.0"]
