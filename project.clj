@@ -9,7 +9,8 @@
                                :passphrase :env}]
                  ["releases" {:url "s3p://opsee-maven-snapshots/releases"
                               :username :env
-                              :passphrase :env}]]
+                              :passphrase :env
+                              :sign-releases false}]]
   :profiles {:dev {:dependencies [[midje "1.6.3"]]
                    :plugins [[lein-midje "3.0.0"]]}}
   :dependencies [[org.clojure/clojure "1.7.0"]
