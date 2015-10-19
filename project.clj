@@ -19,7 +19,7 @@
                   ["deploy"]
                   ["change" "version" "leiningen.release/bump-version"]
                   ["vcs" "commit"]
-                  ["shell" "git" "co" "master"]
+                  ["shell" "git" "checkout" "master"]
                   ["shell" "git" "merge" "release"]
                   ["vcs" "push"]]
   :profiles {:dev {:dependencies [[midje "1.6.3"]]
