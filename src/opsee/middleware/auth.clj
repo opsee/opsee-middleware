@@ -1,28 +1,20 @@
 (ns opsee.middleware.auth
-  (:require [clojure.tools.logging :as log]
-            [cheshire.core :refer :all])
-  (:import [org.jose4j.jwe JsonWebEncryption]
-           [org.jose4j.keys AesKey]))
-
-(def secret (atom nil))
-
-(defn set-secret! [sekrit]
-  (reset! secret (AesKey. sekrit)))
+    (:require [clojure.tools.logging :as log]
+      [cheshire.core :refer :all]
+      [clojure.string :as string])
+    (:import (java.util Base64)))
 
 (defn token->login [token]
-  (->
-    (doto
-      (JsonWebEncryption.)
-      (.setKey @secret)
-      (.setCompactSerialization token))
-    (.getPayload)
-    (parse-string keyword)))
+      (parse-string (->
+                      (Base64/getDecoder)
+                      (.decode token)
+                      (String.)) keyword))
 
-(defn authorized? [token]
-  (if token
-    (try
-      (if-let [login (token->login token)]
-        [true, {:login login}])
-      (catch Exception e
-        (log/info "invalid token:" token "exception:" e)))))
-
+(defn authorized? [scheme token]
+      (case (string/lower-case scheme)
+            "basic" (try
+                      (if-let [login (token->login token)]
+                              [true, {:login login}])
+                      (catch Exception e
+                        (log/info "invalid token:" token "exception:" e)))
+            [false nil]))

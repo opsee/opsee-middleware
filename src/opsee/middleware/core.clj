@@ -70,8 +70,8 @@
 
 (defn user-authorized? [ctx]
   (if-let [auth-header (get-in ctx [:request :headers "authorization"])]
-    (let [[_ slug] (str/split auth-header #" " 2)]
-      (auth/authorized? slug))))
+    (let [[scheme slug] (str/split auth-header #" " 2)]
+      (auth/authorized? scheme slug))))
 
 (defn superuser-authorized? [ctx]
   (if-let [[answer {login :login}] (user-authorized? ctx)]
