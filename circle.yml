@@ -9,6 +9,7 @@ dependencies:
   override:
     - docker info
     - docker pull quay.io/opsee/build-clj
+    - lein deps
 machine:
   java:
     version: oraclejdk8
