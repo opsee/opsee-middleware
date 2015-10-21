@@ -2,9 +2,18 @@ checkout:
   pre:
     - git config --global user.email "bots@opsee.co"
     - git config --global user.name "CI"
+dependencies:
+  override:
+    - docker info
+    - docker pull quay.io/opsee/build-clj
 machine:
   java:
     version: oraclejdk8
+  services:
+    - docker
+test:
+  override:
+    - docker run -e LEIN_USERNAME=$LEIN_USERNAME -e LEIN_PASSPHRASE=$LEIN_PASSPHRASE -v ~/.m2:/root/.m2 -v `pwd`:/build quay.io/opsee/build-clj
 deployment:
   snapshot:
     branch: master
