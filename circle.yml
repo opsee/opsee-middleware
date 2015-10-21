@@ -17,6 +17,8 @@ machine:
 test:
   override:
     - docker run -e LEIN_USERNAME=$LEIN_USERNAME -e LEIN_PASSPHRASE=$LEIN_PASSPHRASE -v ~/.m2:/root/.m2 -v `pwd`:/build quay.io/opsee/build-clj
+  post:
+    - sudo chown -R ubuntu target
 deployment:
   snapshot:
     branch: master
