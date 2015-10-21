@@ -13,7 +13,7 @@
            (java.nio ByteBuffer)
            (io.netty.buffer ByteBuf)
            (clojure.lang Reflector)
-           (co.opsee.proto Any Timestamp BastionProto)
+           (co.opsee.proto Any Timestamp BastionProto HttpResponse)
            (org.joda.time DateTime)))
 
 (def anytypes ["HttpCheck"])
@@ -263,3 +263,8 @@
                          (if (contains? anytypes name)
                            [name (json-schema-inherit (rss/transform (first schemas)))]
                            [name (rss/transform (first schemas))]))) models)))
+
+(defmulti decode-any (fn [^Any any] (.getTypeUrl any)))
+
+(defmethod decode-any "HttpResponse" [^Any any]
+  (HttpResponse/parseFrom (.getValue any)))
