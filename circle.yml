@@ -2,6 +2,9 @@ checkout:
   pre:
     - git config --global user.email "bots@opsee.co"
     - git config --global user.name "CI"
+  post:
+    - git submodule sync
+    - git submodule update --init
 dependencies:
   override:
     - docker info
