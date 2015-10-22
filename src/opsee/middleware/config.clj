@@ -42,4 +42,5 @@
       (when (:DEBUG_CONFIG env)
         (log/info contents))
       (let [cfg (parse-string contents true)]
+        (auth/set-secret! (core/slurp-bytes (:secret cfg)))
         cfg))))
