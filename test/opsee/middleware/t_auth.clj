@@ -8,7 +8,7 @@
 
 (facts "about sessions"
        (fact "we can turn a tokin' into a clojer"
-             (let [login (auth/token->login session-header)]
+             (let [login (auth/token->login "basic" session-header)]
                   (:email login) => "cliff@leaninto.it"))
 
        (fact "gives u a user w a basic tokin'"
