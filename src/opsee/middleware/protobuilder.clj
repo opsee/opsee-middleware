@@ -4,8 +4,9 @@
             [clojure.tools.logging :as log]
             [clj-time.coerce :as c]
             [clj-time.format :as f]
+            [compojure.api.meta :as meta]
             [schema.utils :as su]
-            [ring.swagger.json-schema :as js]
+            [ring.swagger.json-schema :as rsj]
             [ring.swagger.swagger2 :as rss]
             [ring.swagger.core :as rsc]
             [opsee.middleware.core :refer [if-and-let]])
@@ -15,6 +16,8 @@
            (clojure.lang Reflector)
            (co.opsee.proto Any Timestamp BastionProto HttpResponse)
            (org.joda.time DateTime)))
+
+
 
 (def anytypes ["HttpCheck"])
 
@@ -248,6 +251,8 @@
                 (hash->proto clazz data))))))
       (proto->schema clazz))))
 
+
+
 (def anyjson {"Any" {:type "object"
                      :discriminator "type_url"
                      :properties {:type_url {:type "string"
@@ -268,3 +273,13 @@
 
 (defmethod decode-any "HttpResponse" [^Any any]
   (HttpResponse/parseFrom (.getValue any)))
+
+(defmethod rsj/json-type TimestampSchema [_]
+  {:type "string" :format "date-time"})
+(defmethod rsj/json-type AnyTypeSchema [_]
+  {"$ref" "#/definitions/Any"})
+
+(defmethod meta/restructure-param :proto [_ [value clazz] acc]
+  (-> acc
+      (update-in [:lets] into [value (meta/src-coerce! (resolve clazz) :body-params :proto)])
+      (assoc-in [:parameters :parameters :body] (proto->schema (resolve clazz)))))
