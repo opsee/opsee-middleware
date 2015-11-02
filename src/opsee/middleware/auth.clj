@@ -34,3 +34,8 @@
       [false nil])
     (catch Exception e (log/warn e "invalid token:" scheme token)
                         [false nil])))
+
+(defn login->token [login]
+  (str "Basic "
+       (-> (Base64/getEncoder)
+           (.encodeToString (generate-cbor login)))))
