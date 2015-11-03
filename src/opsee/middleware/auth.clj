@@ -38,4 +38,4 @@
 (defn login->token [login]
   (str "Basic "
        (-> (Base64/getEncoder)
-           (.encodeToString (generate-cbor login)))))
+           (.encodeToString (.getBytes (generate-string login))))))
