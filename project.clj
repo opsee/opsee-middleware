@@ -30,6 +30,7 @@
                  [liberator "0.13"]
                  [org.clojure/tools.cli "0.3.1"]
                  [org.liquibase/liquibase-core "3.1.1"]
+                 [com.github.brainlag/nsq-client "1.0.0-SNAPSHOT"]
                  [cheshire "5.4.0"]
                  [clostache "0.6.1"]
                  [metosin/compojure-api "0.22.0" :exclusions [org.clojure/java.classpath hiccup clj-time joda-time]]
