@@ -24,6 +24,11 @@
 (defmethod render-seq-generic "application/json" [data _]
   (generate-string data))
 
+(defn scrub-keys [msg]
+  (-> msg
+      (str/replace #"\"access-key\":\".*?\"" (str "\"access-key\":\"XXXXXXX\""))
+      (str/replace #"\"secret-key\":\".*?\"" (str "\"secret-key\":\"XXXXXXXXXXXX\""))))
+
 (defn log-request [handler]
   (fn [request]
     (if-let [body-rdr (:body request)]
@@ -33,9 +38,9 @@
                    :body (ByteArrayInputStream. (.getBytes body)))
             req'' (if-not (get-in req' [:headers "Content-Type"])
                     (assoc-in req' [:headers "Content-Type"] "application/json"))]
-        (log/info "request:" req'')
+        (log/info "request:" (scrub-keys req''))
         (handler req''))
-      (do (log/info "request:" request)
+      (do (log/info "request:" (scrub-keys request))
           (handler request)))))
 
 (defn log-response [handler]
@@ -43,10 +48,10 @@
     (let [response (handler request)
           response' (if (and
                           (instance? java.io.InputStream (:body response))
-                          (= "application/json" (get-in response [:headers "Content-Type"])))
+                          (.contains (get-in response [:headers "Content-Type"]) "application/json"))
                       (assoc response :body (slurp (:body response)))
                       response)]
-      (log/info "response:" response')
+      (log/info "response:" (scrub-keys response'))
       response')))
 
 (defn log-and-error [ex]
