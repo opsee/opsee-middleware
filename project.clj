@@ -1,4 +1,4 @@
-(defproject co.opsee/opsee-middleware "0.1.9-SNAPSHOT"
+(defproject co.opsee/opsee-middleware "0.1.10-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -24,7 +24,8 @@
                   ["shell" "git" "merge" "release"]
                   ["shell" "git" "push" "origin" "master"]]
   :profiles {:dev {:dependencies [[midje "1.6.3"]]
-                   :plugins [[lein-midje "3.0.0"]]}}
+                   :plugins [[lein-midje "3.0.0"]]
+                   :jvm-opts ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5009"]}}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [ring-cors "0.1.6"]
                  [liberator "0.13"]
