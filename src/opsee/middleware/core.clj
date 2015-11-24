@@ -45,7 +45,7 @@
 
 (defn log-response [handler]
   (fn [request]
-    (let [response (handler request)
+    (let [response (assoc (handler request) :uri (:uri request))
           response' (if (and
                           (instance? java.io.InputStream (:body response))
                           (.contains (get-in response [:headers "Content-Type"]) "application/json"))
