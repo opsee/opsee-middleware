@@ -15,6 +15,8 @@ machine:
     version: oraclejdk8
   services:
     - docker
+  environment:
+    LEIN_SNAPSHOTS_IN_RELEASE: t
 test:
   override:
     - docker run -e LEIN_USERNAME=$LEIN_USERNAME -e LEIN_PASSPHRASE=$LEIN_PASSPHRASE -v ~/.m2:/root/.m2 -v `pwd`:/build quay.io/opsee/build-clj
@@ -29,7 +31,5 @@ deployment:
   release:
     branch: release
     owner: opsee
-    environment:
-      LEIN_SNAPSHOTS_IN_RELEASE: t
     commands:
       - lein release
