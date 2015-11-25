@@ -18,6 +18,10 @@
     (reset! yeller-token token)
     (reset! yeller-client (yeller/client {:token token}))))
 
+(defn report-exception [ex]
+  (if @yeller-client
+    (yeller/report @yeller-client ex)))
+
 (defn env [name]
   (System/getenv (.toUpperCase name)))
 
