@@ -3,9 +3,16 @@
             [cheshire.core :refer :all]
             [clojure.string :as str]
             [opsee.middleware.auth :as auth]
+            [yeller.clojure.client :as yeller]
             [liberator.representation :refer [ring-response render-map-generic render-seq-generic]])
   (:import (java.sql BatchUpdateException)
            (java.io ByteArrayInputStream)))
+
+(def yeller-client (atom nil))
+
+(defn init-yeller! [token]
+  (when token
+    (reset! yeller-client (yeller/client {:token token}))))
 
 (defn env [name]
   (System/getenv (.toUpperCase name)))
@@ -56,6 +63,8 @@
 
 (defn log-and-error [ex]
   (log/error ex "problem encountered")
+  (when @yeller-client
+    (yeller/report @yeller-client ex))
   {:status  500
    :headers {"Content-Type" "application/json"} `:body    (generate-string {:error (.getMessage ex)})})
 

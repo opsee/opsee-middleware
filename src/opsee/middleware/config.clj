@@ -43,4 +43,5 @@
         (log/info contents))
       (let [cfg (parse-string contents true)]
         (auth/set-secret! (core/slurp-bytes (:secret cfg)))
+        (core/init-yeller! (:yeller cfg))
         cfg))))

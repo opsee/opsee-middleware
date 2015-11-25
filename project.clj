@@ -34,6 +34,7 @@
                  [com.github.brainlag/nsq-client "1.0.0-SNAPSHOT"]
                  [cheshire "5.4.0"]
                  [clostache "0.6.1"]
+                 [yeller-clojure-client "1.2.1"]
                  [metosin/compojure-api "0.22.0" :exclusions [org.clojure/java.classpath hiccup clj-time joda-time]]
                  [c3p0/c3p0 "0.9.1.2"]
                  [com.google.protobuf/protobuf-java "3.0.0-alpha-3.1"]
