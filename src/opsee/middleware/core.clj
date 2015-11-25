@@ -2,16 +2,20 @@
   (:require [clojure.tools.logging :as log]
             [cheshire.core :refer :all]
             [clojure.string :as str]
+            [compojure.api.middleware :as mw]
             [opsee.middleware.auth :as auth]
             [yeller.clojure.client :as yeller]
+            [yeller.clojure.ring]
             [liberator.representation :refer [ring-response render-map-generic render-seq-generic]])
   (:import (java.sql BatchUpdateException)
            (java.io ByteArrayInputStream)))
 
 (def yeller-client (atom nil))
+(def yeller-token (atom nil))
 
 (defn init-yeller! [token]
   (when token
+    (reset! yeller-token token)
     (reset! yeller-client (yeller/client {:token token}))))
 
 (defn env [name]
@@ -24,6 +28,10 @@
    '(if (env name)
       positive
       negative)))
+
+(defn rethrow-exceptions [handler]
+  (fn [request]
+    (handler (assoc request mw/rethrow-exceptions? true))))
 
 (defmethod render-map-generic "application/json" [data _]
   (generate-string data))
@@ -63,8 +71,6 @@
 
 (defn log-and-error [ex]
   (log/error ex "problem encountered")
-  (when @yeller-client
-    (yeller/report @yeller-client ex))
   {:status  500
    :headers {"Content-Type" "application/json"} `:body    (generate-string {:error (.getMessage ex)})})
 
@@ -72,6 +78,21 @@
   (if (instance? BatchUpdateException ex)
     (log-and-error (.getNextException ex))
     (log-and-error ex)))
+
+(defn handle-rethrown-errors [handler]
+  (fn [request]
+    (try
+      (handler request)
+      (catch Exception ex (robustify-errors ex)))))
+
+(defn setup-yeller [handler]
+  (if @yeller-token
+    (-> handler
+        (yeller.clojure.ring/wrap-ring {:token @yeller-token
+                                        :environment (System/getenv "APPENV")})
+        rethrow-exceptions
+        handle-rethrown-errors)
+    handler))
 
 (defn json-body [ctx]
   (if-let [body (get-in ctx [:request :strbody])]
