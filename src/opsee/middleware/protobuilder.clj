@@ -14,7 +14,7 @@
            (java.nio ByteBuffer)
            (io.netty.buffer ByteBuf)
            (clojure.lang Reflector)
-           (co.opsee.proto Any Timestamp BastionProto HttpResponse)
+           (co.opsee.proto Any Timestamp BastionProto AWSProto HttpResponse)
            (org.joda.time DateTime)))
 
 
