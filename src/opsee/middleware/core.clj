@@ -18,9 +18,13 @@
     (reset! yeller-token token)
     (reset! yeller-client (yeller/client {:token token}))))
 
-(defn report-exception [ex]
-  (if @yeller-client
-    (yeller/report @yeller-client ex)))
+(defn report-exception
+  ([ex]
+   (if @yeller-client
+     (yeller/report @yeller-client ex)))
+  ([ex context]
+   (if @yeller-client
+     (yeller/report @yeller-client ex {:custom-data context}))))
 
 (defn env [name]
   (System/getenv (.toUpperCase name)))
@@ -89,13 +93,18 @@
       (handler request)
       (catch Exception ex (robustify-errors ex)))))
 
+(defn inject-yeller-context [handler]
+  (fn [request]
+    ))
+
 (defn setup-yeller [handler]
   (if @yeller-token
     (-> handler
         (yeller.clojure.ring/wrap-ring {:token @yeller-token
                                         :environment (System/getenv "APPENV")})
         rethrow-exceptions
-        handle-rethrown-errors)
+        handle-rethrown-errors
+        inject-yeller-context)
     handler))
 
 (defn json-body [ctx]
