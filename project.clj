@@ -29,6 +29,7 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [ring-cors "0.1.6"]
                  [liberator "0.13"]
+                 [verschlimmbesserung "0.1.2"]
                  [org.clojure/tools.cli "0.3.1"]
                  [org.liquibase/liquibase-core "3.1.1"]
                  [com.github.brainlag/nsq-client "1.0.0-SNAPSHOT"]
