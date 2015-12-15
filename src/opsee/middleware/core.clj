@@ -103,8 +103,7 @@
         (yeller.clojure.ring/wrap-ring {:token @yeller-token
                                         :environment (System/getenv "APPENV")})
         rethrow-exceptions
-        handle-rethrown-errors
-        inject-yeller-context)
+        handle-rethrown-errors)
     handler))
 
 (defn json-body [ctx]
