@@ -2,15 +2,18 @@
   (:require [clojure.tools.logging :as log]
             [slingshot.slingshot :refer [try+]]
             [verschlimmbesserung.core :as v])
-  (:import (java.net SocketTimeoutException MalformedURLException)))
+  (:import (java.net SocketTimeoutException MalformedURLException)
+           (org.apache.http.conn ConnectTimeoutException)))
 
 (defn wait-index [client name index path opts]
   (loop [result (atom nil)]
     (try+
-      (reset! result (v/get* client path (merge {:wait? true :wait-index index :timeout 30} opts)))
+      (reset! result (v/get* client path (merge {:wait? true :wait-index index :timeout 300} opts)))
 
       (catch SocketTimeoutException _)
       (catch MalformedURLException _
+        (Thread/sleep 10000))
+      (catch ConnectTimeoutException _
         (Thread/sleep 10000))
       (catch [:errorCode 401] _ (reset! result true))
       (catch Exception ex
