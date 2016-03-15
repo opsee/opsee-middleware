@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FieldOptions {
+    bool is_required = 60000;
+}
+
+extend google.protobuf.EnumValueOptions {
+    string enum_name = 51234;
+}
+
+package aws_command;
+
+option java_package = "co.opsee.proto";
+option java_multiple_files = true;
+option java_outer_classname = "AWSProto";
+
+service ec2 {
+    rpc StartInstances(StartInstancesRequest) returns(StartInstancesResult) {}
+    rpc StopInstances(StopInstancesRequest) returns(StopInstancesResult) {}
+    rpc RebootInstances(RebootInstancesRequest) returns(RebootInstancesResult) {}
+}
+
+message StopInstancesRequest {
+   bool dryRun = 1;
+   bool force = 2;
+   repeated string InstanceIds = 3 [(is_required)=true];
+}
+
+message StopInstancesResult {
+   repeated InstanceStateChange StoppingInstances = 1;
+}
+
+message StartInstancesRequest {
+   string additionalInfo = 1;
+   bool dryRun = 2;
+   repeated string InstanceIds = 3 [(is_required)=true];
+}
+
+message InstanceState {
+   int64 code = 1;
+   string name = 2;
+}
+message InstanceStateChange {
+   string instanceId = 1;
+   InstanceState currentState = 2;
+   InstanceState previousState = 3;
+}
+
+message StartInstancesResult {
+   repeated InstanceStateChange StartingInstances = 1;
+}
+
+message RebootInstancesRequest {
+   bool dryRun = 1;
+   repeated string InstanceIds = 2 [(is_required)=true];
+}
+
+// ec2.RebootInstancesOutput is just an empty struct, so just return whether or not the command executed in (err)
+message RebootInstancesResult{
+    string err = 1;    
+}
+
