@@ -80,7 +80,7 @@
                   c/to-epoch)
      :nanos 0}))
 (defmethod parse-deadline Integer [value]
-  (str value "s"))
+  (parse-deadline (str value "s")))
 (defmethod parse-deadline :default [value]
   value)
 
