@@ -62,7 +62,7 @@
 (defn log-response [handler]
   (fn [request]
     (let [response (assoc (handler request) :uri (:uri request))]
-      (log/info "response:" (dissoc (scrub-keys response) :body))
+      (log/info "response:" (dissoc response :body))
       response)))
 
 (defn log-and-error [ex]
