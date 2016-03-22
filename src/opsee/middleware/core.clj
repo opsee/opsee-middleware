@@ -54,13 +54,15 @@
 
 (defn log-request [handler]
   (fn [request]
-    (do (log/info "request:" (scrub-keys request))
-        (handler request))))
+    (let [req (if-not (get-in request [:headers "Content-Type"])
+                      (assoc-in request [:headers "Content-Type"] "application/json"))]
+      (do (log/info "request:" (scrub-keys req))
+          (handler req)))))
 
 (defn log-response [handler]
   (fn [request]
     (let [response (assoc (handler request) :uri (:uri request))]
-      (log/info "response:" (scrub-keys response))
+      (log/info "response:" (dissoc (scrub-keys response) :body))
       response)))
 
 (defn log-and-error [ex]
