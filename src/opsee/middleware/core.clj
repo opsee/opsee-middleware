@@ -54,28 +54,14 @@
 
 (defn log-request [handler]
   (fn [request]
-    (if-let [body-rdr (:body request)]
-      (let [body (slurp body-rdr)
-            req' (assoc request
-                   :strbody body
-                   :body (ByteArrayInputStream. (.getBytes body)))
-            req'' (if-not (get-in req' [:headers "Content-Type"])
-                    (assoc-in req' [:headers "Content-Type"] "application/json"))]
-        (log/info "request:" (scrub-keys req''))
-        (handler req''))
-      (do (log/info "request:" (scrub-keys request))
-          (handler request)))))
+    (do (log/info "request:" (scrub-keys request))
+        (handler request))))
 
 (defn log-response [handler]
   (fn [request]
-    (let [response (assoc (handler request) :uri (:uri request))
-          response' (if (and
-                          (instance? java.io.InputStream (:body response))
-                          (.contains (get-in response [:headers "Content-Type"]) "application/json"))
-                      (assoc response :body (slurp (:body response)))
-                      response)]
-      (log/info "response:" (scrub-keys response'))
-      response')))
+    (let [response (assoc (handler request) :uri (:uri request))]
+      (log/info "response:" (scrub-keys response))
+      response)))
 
 (defn log-and-error [ex]
   (log/error ex "problem encountered")
