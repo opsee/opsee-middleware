@@ -14,7 +14,7 @@
            (java.nio ByteBuffer)
            (io.netty.buffer ByteBuf)
            (clojure.lang Reflector)
-           (co.opsee.proto Any Timestamp BastionProto AWSProto HttpResponse)
+           (co.opsee.proto Any Timestamp BastionProto AWSProto HttpResponse CloudWatchResponse)
            (org.joda.time DateTime)))
 
 
@@ -275,6 +275,9 @@
 
 (defmethod decode-any "HttpResponse" [^Any any]
   (HttpResponse/parseFrom (.getValue any)))
+
+(defmethod decode-any "CloudWatchResponse" [^Any any]
+  (CloudWatchResponse/parseFrom (.getValue any)))
 
 (defmethod rsj/json-type TimestampSchema [_]
   {:type "string" :format "date-time"})
