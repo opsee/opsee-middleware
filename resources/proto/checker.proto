@@ -99,7 +99,7 @@ message Metric {
 	string name = 1;
 	double value = 2;
 	repeated Tag tags = 3;
-	opsee.types.Timestamp timestamp = 4;
+	Timestamp timestamp = 4;
 	string unit = 5;	  // kbps, percent, ...
 	string statistic = 6; // average, sum, ...
 }
