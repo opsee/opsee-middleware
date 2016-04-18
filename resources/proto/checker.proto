@@ -31,6 +31,11 @@ message Timestamp {
 	int64 nanos = 2;
 }
 
+message Error {
+    string errorCode = 1;
+    string errorMessage = 2;
+}
+
 message Target {
 	string name = 1;
 	string type = 2 [(is_required)=true]; //required
@@ -88,6 +93,7 @@ message CloudWatchResponse {
 	// The AWS CloudWatch metric namespace, e.g. AWS/RDS
 	string namespace = 1;
 	repeated Metric metrics = 2;
+    repeated Error errors = 3; // code field corresponds to MetricName
 }
 
 message Tag {

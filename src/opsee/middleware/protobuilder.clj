@@ -19,7 +19,7 @@
 
 
 
-(def anytypes ["HttpCheck"])
+(def anytypes ["HttpCheck" "CloudWatchCheck"])
 
 (defn- byte-string [buf]
   (cond
