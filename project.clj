@@ -1,4 +1,4 @@
-(defproject co.opsee/opsee-middleware "0.1.29"
+(defproject co.opsee/opsee-middleware "0.1.30-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
