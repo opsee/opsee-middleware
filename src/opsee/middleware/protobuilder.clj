@@ -81,6 +81,8 @@
      :nanos 0}))
 (defmethod parse-deadline Integer [value]
   (parse-deadline (str value "s")))
+(defmethod parse-deadline Long [value]
+  (parse-deadline (str value "s")))
 (defmethod parse-deadline :default [value]
   value)
 
