@@ -52,6 +52,8 @@ message Check {
 	string name = 6 [(is_required)=true]; //required
   repeated Assertion assertions = 7;
   repeated CheckResult results = 8;
+	string customer_id = 10;
+	string execution_group_id = 11;
 }
 
 message Assertion {
