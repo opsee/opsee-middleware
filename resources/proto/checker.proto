@@ -54,6 +54,11 @@ message Check {
   repeated CheckResult results = 8;
 	string customer_id = 10;
 	string execution_group_id = 11;
+	int32 min_failing_count = 12 [(gogoproto.moretags) = "db:\"min_failing_count\""];
+	int64 min_failing_time = 13 [(gogoproto.moretags) = "db:\"min_failing_time\""];
+	int32 failing_count = 14;
+	int32 response_count = 15;
+	string state = 16;
 }
 
 message Assertion {
@@ -164,7 +169,8 @@ message CheckResult {
 	repeated CheckResponse responses = 5;
 	Target target = 6;
 	string check_name = 7;
-  int32 version = 8;
+	int32 version = 8;
+	string bastion_id = 9;
 }
 
 message DiscoveryEvent {
