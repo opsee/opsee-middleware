@@ -54,8 +54,8 @@ message Check {
   repeated CheckResult results = 8;
 	string customer_id = 10;
 	string execution_group_id = 11;
-	int32 min_failing_count = 12 [(gogoproto.moretags) = "db:\"min_failing_count\""];
-	int64 min_failing_time = 13 [(gogoproto.moretags) = "db:\"min_failing_time\""];
+	int32 min_failing_count = 12;
+	int64 min_failing_time = 13;
 	int32 failing_count = 14;
 	int32 response_count = 15;
 	string state = 16;
